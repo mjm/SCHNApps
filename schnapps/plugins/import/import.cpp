@@ -49,6 +49,9 @@ QString Plugin_Import::plugin_name()
 
 bool Plugin_Import::enable()
 {
+	import_point_set_mesh_action_ = schnapps_->add_menu_action("Import;Point Set Mesh", "import point set mesh");
+	connect(import_point_set_mesh_action_, SIGNAL(triggered()), this, SLOT(import_point_set_mesh_from_file_dialog()));
+
 	import_surface_mesh_action_ = schnapps_->add_menu_action("Import;Surface Mesh", "import surface mesh");
 	connect(import_surface_mesh_action_, SIGNAL(triggered()), this, SLOT(import_surface_mesh_from_file_dialog()));
 
@@ -78,9 +81,72 @@ bool Plugin_Import::enable()
 
 void Plugin_Import::disable()
 {
+	schnapps_->remove_menu_action(import_point_set_mesh_action_);
 	schnapps_->remove_menu_action(import_surface_mesh_action_);
 	schnapps_->remove_menu_action(import_volume_mesh_action_);
 	//	schnapps_->remove_menu_action(import_2D_image_action_);
+}
+
+MapHandlerGen* Plugin_Import::import_point_set_mesh_from_file(const QString& filename)
+{
+	QFileInfo fi(filename);
+	if (fi.exists())
+	{
+		MapHandlerGen* mhg = schnapps_->add_map(fi.baseName(), 0);
+		if (mhg)
+		{
+			CMap0Handler* mh = static_cast<CMap0Handler*>(mhg);
+			CMap0* map = mh->get_map();
+
+			cgogn::io::import_point_set<VEC3>(*map, filename.toStdString());
+
+			mh->notify_connectivity_change();
+
+			if (mh->is_embedded(Dart_Cell))
+			{
+				const auto* container = mh->attribute_container(Dart_Cell);
+				const std::vector<std::string>& names = container->names();
+				for (std::size_t i = 0u; i < names.size(); ++i)
+					mh->notify_attribute_added(mh->orbit(Dart_Cell), QString::fromStdString(names[i]));
+			}
+			if (mh->is_embedded(Vertex_Cell))
+			{
+				const auto* container = mh->attribute_container(Vertex_Cell);
+				const std::vector<std::string>& names = container->names();
+				for (std::size_t i = 0u; i < names.size(); ++i)
+					mh->notify_attribute_added(mh->orbit(Vertex_Cell), QString::fromStdString(names[i]));
+			}
+
+			if (mhg->nb_cells(Vertex_Cell) > 0)
+			{
+				for (const QString& vbo_name : setting_vbo_names_)
+					mhg->create_vbo(vbo_name);
+
+				mh->set_bb_vertex_attribute(setting_bbox_name_);
+			}
+		}
+		return mhg;
+	}
+	else
+		return nullptr;
+}
+
+void Plugin_Import::import_point_set_mesh_from_file_dialog()
+{
+	QStringList filenames = QFileDialog::getOpenFileNames(nullptr, "Import point set meshes", setting_default_path_, "Point Set mesh Files (*.plo)");
+	QStringList::Iterator it = filenames.begin();
+
+	if  (it != filenames.end())
+	{
+		QFileInfo info(*it);
+		setting_default_path_ = info.path();
+	}
+
+	while (it != filenames.end())
+	{
+		import_point_set_mesh_from_file(*it);
+		++it;
+	}
 }
 
 MapHandlerGen* Plugin_Import::import_surface_mesh_from_file(const QString& filename)

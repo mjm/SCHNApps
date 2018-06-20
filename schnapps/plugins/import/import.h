@@ -63,11 +63,23 @@ private slots:
 	/**
 	* @brief import a surface mesh by opening a FileDialog
 	*/
+	void import_point_set_mesh_from_file_dialog();
+
+	/**
+	* @brief import a surface mesh by opening a FileDialog
+	*/
 	void import_surface_mesh_from_file_dialog();
 
 	void import_volume_mesh_from_file_dialog();
 
 public:
+
+	/**
+	* @brief import a point set mesh from a file
+	* @param filename file name of mesh file
+	* @return a new MapHandlerGen that handles the mesh
+	*/
+	MapHandlerGen* import_point_set_mesh_from_file(const QString& filename);
 
 	/**
 	* @brief import a surface mesh from a file
@@ -84,6 +96,7 @@ private:
 	QStringList setting_vbo_names_;
 	QString setting_default_path_;
 
+	QAction* import_point_set_mesh_action_;
 	QAction* import_surface_mesh_action_;
 	QAction* import_volume_mesh_action_;
 };
