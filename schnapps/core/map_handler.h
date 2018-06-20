@@ -974,6 +974,7 @@ private:
 };
 
 #ifndef SCHNAPPS_CORE_MAPHANDLER_CPP_
+template class SCHNAPPS_CORE_API MapHandler<CMap0>;
 template class SCHNAPPS_CORE_API MapHandler<CMap2>;
 template class SCHNAPPS_CORE_API MapHandler<CMap3>;
 #endif // SCHNAPPS_CORE_MAPHANDLER_CPP_

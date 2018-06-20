@@ -34,6 +34,10 @@ namespace cgogn
 
 class MapBaseData;
 
+struct CMap0Type;
+template <typename MAP_TYPE>
+class CMap0_T;
+
 struct CMap2Type;
 template <typename MAP_TYPE>
 class CMap2_T;
@@ -50,6 +54,7 @@ namespace schnapps
 using namespace cgogn::numerics;
 
 using MapBaseData = cgogn::MapBaseData;
+using CMap0 = cgogn::CMap0_T<cgogn::CMap0Type>;
 using CMap2 = cgogn::CMap2_T<cgogn::CMap2Type>;
 using CMap3 = cgogn::CMap3_T<cgogn::CMap3Type>;
 
@@ -120,6 +125,7 @@ using SCALAR = cgogn::geometry::vector_traits<VEC3>::Scalar;
 template <typename MAP_TYPE>
 class MapHandler;
 
+using CMap0Handler = MapHandler<CMap0>;
 using CMap2Handler = MapHandler<CMap2>;
 using CMap3Handler = MapHandler<CMap3>;
 

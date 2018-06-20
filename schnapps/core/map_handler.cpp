@@ -31,6 +31,7 @@
 namespace schnapps
 {
 
+template class SCHNAPPS_CORE_API MapHandler<CMap0>;
 template class SCHNAPPS_CORE_API MapHandler<CMap2>;
 template class SCHNAPPS_CORE_API MapHandler<CMap3>;
 
