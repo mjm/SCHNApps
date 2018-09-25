@@ -38,7 +38,7 @@ branches:
   only:
   - develop
 
-install:
+script:
   - git clone -b develop --depth=1  https://github.com/cgogn/CGoGN_2
   - cd CGoGN_2
   - mkdir build
@@ -52,8 +52,6 @@ install:
   - make -j2
   - sudo make install
   - cd ../..
-
-script:
   - mkdir build
   - cd build
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
