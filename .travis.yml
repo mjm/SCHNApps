@@ -37,9 +37,9 @@ script:
       source /opt/qt58/bin/qt58-env.sh ;
     fi
     
-branches:
-  only:
-  - develop
+#branches:
+#  only:
+#  - develop
 
 install:
   - git clone -b develop --depth=1  https://github.com/cgogn/CGoGN_2
