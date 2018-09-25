@@ -1,12 +1,12 @@
 language: cpp
 
 matrix:
-    include:
-        - os: linux
-          sudo: required
-          dist: trusty
-        - os: osx
-          osx_image: xcode10
+  include:
+    - os: linux
+      sudo: required
+      dist: trusty
+    - os: osx
+      osx_image: xcode10
 
 addons:
   apt:
@@ -20,8 +20,7 @@ addons:
       - qt58base
   homebrew:
     packages:
-      - qt
-    update: true
+      - qt5 
 
 before_install:
   # manually install latest cmake
