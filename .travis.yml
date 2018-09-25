@@ -13,22 +13,24 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
       - sourceline: "ppa:beineri/opt-qt58-trusty"
+      - sourceline: "ppa:corentinjabot/cmake-backport" #cmake 3.7.2
+      # cmake 3.12 ppa:dluxen/cmake-backports
     packages:
       - gcc-5
       - g++-5
       - libglu1-mesa-dev
       - qt58base
+      - cmake
   homebrew:
     packages:
       - qt5 
 
-before_install:
-  # manually install latest cmake
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      wget -q https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.sh ;
-      sudo sh cmake-3.10.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir --skip-license ; 
-    fi
-  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt5 ; fi
+# before_install:
+#   # manually install latest cmake
+#   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+#       wget -q https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.sh ;
+#       sudo sh cmake-3.10.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir --skip-license ; 
+#     fi
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -48,7 +50,7 @@ install:
       cmake .. -DCMAKE_CXX_COMPILER=g++-5 -DCMAKE_C_COMPILER=gcc-5 ; 
     fi 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then  
-      cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt ; 
+      cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix qt) ; 
     fi
   - make -j2
   - sudo make install
@@ -85,7 +87,7 @@ script:
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       cmake ..
-        -DCMAKE_PREFIX_PATH=/usr/local/opt/qt
+        -DCMAKE_PREFIX_PATH=$(brew --prefix qt)
         -DUSE_PLUGIN_attribute_editor:BOOL=ON
         -DUSE_PLUGIN_cage_3d_deformation:BOOL=OFF
         -DUSE_PLUGIN_empty_plugin:BOOL=ON
