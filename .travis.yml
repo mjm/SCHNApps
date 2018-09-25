@@ -18,9 +18,9 @@ addons:
       - g++-5
       - libglu1-mesa-dev
       - qt58base
-  homebrew:
-    packages:
-      - qt5 
+  # homebrew:
+  #   packages:
+  #     - qt5 
 
 before_install:
   # manually install latest cmake
@@ -28,6 +28,7 @@ before_install:
       wget -q https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.sh ;
       sudo sh cmake-3.10.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir --skip-license ; 
     fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt5 ; fi
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -38,7 +39,7 @@ branches:
   only:
   - develop
 
-script:
+install:
   - git clone -b develop --depth=1  https://github.com/cgogn/CGoGN_2
   - cd CGoGN_2
   - mkdir build
@@ -52,6 +53,8 @@ script:
   - make -j2
   - sudo make install
   - cd ../..
+
+script:
   - mkdir build
   - cd build
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
