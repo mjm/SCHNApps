@@ -48,7 +48,7 @@ install:
       cmake .. -DCMAKE_CXX_COMPILER=g++-5 -DCMAKE_C_COMPILER=gcc-5 ; 
     fi 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then  
-      cmake .. ; 
+      cmake .. -DCMAKE_PREFIX_PATH=/usr/local/opt/qt ; 
     fi
   - make -j2
   - sudo make install
@@ -85,7 +85,6 @@ script:
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       cmake ..
-        -DCMAKE_PREFIX_PATH=/usr/local/opt/qt
         -DUSE_PLUGIN_attribute_editor:BOOL=ON
         -DUSE_PLUGIN_cage_3d_deformation:BOOL=OFF
         -DUSE_PLUGIN_empty_plugin:BOOL=ON
